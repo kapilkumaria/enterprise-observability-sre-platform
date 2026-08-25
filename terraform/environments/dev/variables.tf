@@ -53,3 +53,28 @@ variable "flow_log_retention_days" {
   type        = number
   default     = 30
 }
+
+variable "cluster_version" {
+  description = "Kubernetes minor version used by Amazon EKS."
+  type        = string
+  default     = "1.36"
+}
+
+variable "cluster_public_access_cidrs" {
+  description = "IPv4 CIDRs allowed to reach the public EKS API endpoint."
+  type        = list(string)
+
+  validation {
+    condition = (
+      length(var.cluster_public_access_cidrs) > 0 &&
+      !contains(var.cluster_public_access_cidrs, "0.0.0.0/0")
+    )
+    error_message = "Restricted EKS API access CIDRs must be provided."
+  }
+}
+
+variable "control_plane_log_retention_days" {
+  description = "CloudWatch retention period for EKS control-plane logs."
+  type        = number
+  default     = 30
+}

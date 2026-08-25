@@ -67,3 +67,48 @@ output "ebs_csi_role_arn" {
   description = "ARN of the EBS CSI Pod Identity role."
   value       = module.iam.ebs_csi_role_arn
 }
+
+output "cluster_name" {
+  description = "Name of the Amazon EKS cluster."
+  value       = module.eks.cluster_name
+}
+
+output "cluster_arn" {
+  description = "ARN of the Amazon EKS cluster."
+  value       = module.eks.cluster_arn
+}
+
+output "cluster_version" {
+  description = "Kubernetes version of the Amazon EKS cluster."
+  value       = module.eks.cluster_version
+}
+
+output "cluster_status" {
+  description = "Current status of the Amazon EKS cluster."
+  value       = module.eks.cluster_status
+}
+
+output "cluster_endpoint" {
+  description = "Kubernetes API endpoint."
+  value       = module.eks.cluster_endpoint
+}
+
+output "cluster_security_group_id" {
+  description = "Security group created by EKS."
+  value       = module.eks.cluster_security_group_id
+}
+
+output "cluster_oidc_issuer" {
+  description = "OIDC issuer URL exposed by the cluster."
+  value       = module.eks.cluster_oidc_issuer
+}
+
+output "eks_secrets_kms_key_arn" {
+  description = "ARN of the KMS key used for Kubernetes Secrets."
+  value       = module.eks.kms_key_arn
+}
+
+output "eks_control_plane_log_group_name" {
+  description = "CloudWatch log group receiving EKS control-plane logs."
+  value       = module.eks.control_plane_log_group_name
+}

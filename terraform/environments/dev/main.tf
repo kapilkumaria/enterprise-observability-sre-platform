@@ -18,3 +18,23 @@ module "iam" {
   environment  = var.environment
   cluster_name = var.cluster_name
 }
+
+data "aws_caller_identity" "current" {}
+
+module "eks" {
+  source = "../../modules/eks"
+
+  project_name                     = var.project_name
+  environment                      = var.environment
+  cluster_name                     = var.cluster_name
+  cluster_version                  = var.cluster_version
+  cluster_role_arn                 = module.iam.eks_cluster_role_arn
+  private_subnet_ids               = module.networking.private_subnet_ids
+  cluster_public_access_cidrs      = var.cluster_public_access_cidrs
+  admin_principal_arn              = data.aws_caller_identity.current.arn
+  control_plane_log_retention_days = var.control_plane_log_retention_days
+
+  depends_on = [
+    module.iam
+  ]
+}

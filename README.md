@@ -142,7 +142,7 @@ Project implementation started on August 25, 2026.
 
 Current stage:
 ```
-Phase 4 — EKS IAM and Pod Identity foundation
+Phase 5 — Amazon EKS control-plane foundation
 ```
 ## Documentation
 
