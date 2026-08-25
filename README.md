@@ -142,7 +142,7 @@ Project implementation started on August 25, 2026.
 
 Current stage:
 ```
-Phase 2 — Secure Terraform remote-state bootstrap
+Phase 3 — AWS networking foundation
 ```
 ## Documentation
 
