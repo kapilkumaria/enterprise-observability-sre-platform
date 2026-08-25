@@ -119,3 +119,83 @@ variable "vpc_cni_role_arn" {
     error_message = "The VPC CNI role must be a valid IAM role ARN."
   }
 }
+
+variable "node_role_arn" {
+  description = "ARN of the IAM role used by EKS managed worker nodes."
+  type        = string
+
+  validation {
+    condition     = can(regex("^arn:aws:iam::[0-9]{12}:role/", var.node_role_arn))
+    error_message = "The EKS node role must be a valid IAM role ARN."
+  }
+}
+
+variable "node_group_name" {
+  description = "Name of the EKS managed node group."
+  type        = string
+}
+
+variable "node_group_instance_types" {
+  description = "EC2 instance types used by the EKS managed node group."
+  type        = list(string)
+
+  validation {
+    condition     = length(var.node_group_instance_types) > 0
+    error_message = "At least one EC2 instance type must be provided."
+  }
+}
+
+variable "node_group_capacity_type" {
+  description = "Capacity type used by the EKS managed node group."
+  type        = string
+
+  validation {
+    condition     = contains(["ON_DEMAND", "SPOT"], var.node_group_capacity_type)
+    error_message = "The node-group capacity type must be ON_DEMAND or SPOT."
+  }
+}
+
+variable "node_group_ami_type" {
+  description = "EKS-optimized AMI type used by the managed node group."
+  type        = string
+}
+
+variable "node_group_disk_size" {
+  description = "Root EBS volume size in GiB for each worker node."
+  type        = number
+
+  validation {
+    condition     = var.node_group_disk_size >= 20
+    error_message = "The node-group disk size must be at least 20 GiB."
+  }
+}
+
+variable "node_group_desired_size" {
+  description = "Desired number of worker nodes."
+  type        = number
+
+  validation {
+    condition     = var.node_group_desired_size >= 1
+    error_message = "The desired node-group size must be at least one."
+  }
+}
+
+variable "node_group_min_size" {
+  description = "Minimum number of worker nodes."
+  type        = number
+
+  validation {
+    condition     = var.node_group_min_size >= 1
+    error_message = "The minimum node-group size must be at least one."
+  }
+}
+
+variable "node_group_max_size" {
+  description = "Maximum number of worker nodes."
+  type        = number
+
+  validation {
+    condition     = var.node_group_max_size >= var.node_group_min_size
+    error_message = "The maximum node-group size must be greater than or equal to its minimum size."
+  }
+}

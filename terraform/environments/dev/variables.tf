@@ -96,3 +96,51 @@ variable "kube_proxy_version" {
   type        = string
   default     = "v1.36.0-eksbuild.14"
 }
+
+variable "node_group_name" {
+  description = "Name of the development EKS managed node group."
+  type        = string
+  default     = "system"
+}
+
+variable "node_group_instance_types" {
+  description = "EC2 instance types used by development worker nodes."
+  type        = list(string)
+  default     = ["t3.large"]
+}
+
+variable "node_group_capacity_type" {
+  description = "Capacity type used by development worker nodes."
+  type        = string
+  default     = "ON_DEMAND"
+}
+
+variable "node_group_ami_type" {
+  description = "EKS-optimized AMI used by development worker nodes."
+  type        = string
+  default     = "AL2023_x86_64_STANDARD"
+}
+
+variable "node_group_disk_size" {
+  description = "Root EBS volume size in GiB for development worker nodes."
+  type        = number
+  default     = 50
+}
+
+variable "node_group_desired_size" {
+  description = "Desired number of development worker nodes."
+  type        = number
+  default     = 3
+}
+
+variable "node_group_min_size" {
+  description = "Minimum number of development worker nodes."
+  type        = number
+  default     = 2
+}
+
+variable "node_group_max_size" {
+  description = "Maximum number of development worker nodes."
+  type        = number
+  default     = 4
+}

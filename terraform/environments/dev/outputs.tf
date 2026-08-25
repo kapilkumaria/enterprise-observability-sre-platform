@@ -127,3 +127,33 @@ output "kube_proxy_version" {
   description = "Installed kube-proxy version."
   value       = module.eks.kube_proxy_version
 }
+
+output "node_group_name" {
+  description = "Name of the EKS managed node group."
+  value       = module.eks.node_group_name
+}
+
+output "node_group_arn" {
+  description = "ARN of the EKS managed node group."
+  value       = module.eks.node_group_arn
+}
+
+output "node_group_status" {
+  description = "Current status of the EKS managed node group."
+  value       = module.eks.node_group_status
+}
+
+output "node_group_instance_types" {
+  description = "EC2 instance types used by the managed node group."
+  value       = module.eks.node_group_instance_types
+}
+
+output "node_group_capacity_type" {
+  description = "Capacity type used by the managed node group."
+  value       = module.eks.node_group_capacity_type
+}
+
+output "node_group_scaling_config" {
+  description = "Scaling configuration of the managed node group."
+  value       = module.eks.node_group_scaling_config
+}

@@ -37,6 +37,15 @@ module "eks" {
   vpc_cni_version                  = var.vpc_cni_version
   kube_proxy_version               = var.kube_proxy_version
   vpc_cni_role_arn                 = module.iam.vpc_cni_role_arn
+  node_role_arn                    = module.iam.eks_node_role_arn
+  node_group_name                  = var.node_group_name
+  node_group_instance_types        = var.node_group_instance_types
+  node_group_capacity_type         = var.node_group_capacity_type
+  node_group_ami_type              = var.node_group_ami_type
+  node_group_disk_size             = var.node_group_disk_size
+  node_group_desired_size          = var.node_group_desired_size
+  node_group_min_size              = var.node_group_min_size
+  node_group_max_size              = var.node_group_max_size
 
   depends_on = [
     module.iam

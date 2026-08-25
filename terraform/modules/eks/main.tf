@@ -159,3 +159,58 @@ resource "aws_eks_addon" "kube_proxy" {
     ClusterName = var.cluster_name
   }
 }
+
+resource "aws_eks_node_group" "system" {
+  cluster_name    = aws_eks_cluster.this.name
+  node_group_name = var.node_group_name
+  node_role_arn   = var.node_role_arn
+  subnet_ids      = var.private_subnet_ids
+
+  version        = var.cluster_version
+  ami_type       = var.node_group_ami_type
+  capacity_type  = var.node_group_capacity_type
+  instance_types = var.node_group_instance_types
+  disk_size      = var.node_group_disk_size
+
+  scaling_config {
+    desired_size = var.node_group_desired_size
+    min_size     = var.node_group_min_size
+    max_size     = var.node_group_max_size
+  }
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  node_repair_config {
+    enabled = true
+  }
+
+  labels = {
+    "node-role" = "system"
+    "workload"  = "platform"
+  }
+
+  tags = {
+    Name        = "${local.name_prefix}-${var.node_group_name}-node-group"
+    Purpose     = "EKS platform and observability workloads"
+    ClusterName = var.cluster_name
+    NodeGroup   = var.node_group_name
+  }
+
+  depends_on = [
+    aws_eks_addon.pod_identity_agent,
+    aws_eks_addon.vpc_cni,
+    aws_eks_addon.kube_proxy
+  ]
+
+  lifecycle {
+    precondition {
+      condition = (
+        var.node_group_min_size <= var.node_group_desired_size &&
+        var.node_group_desired_size <= var.node_group_max_size
+      )
+      error_message = "Node-group size must satisfy min_size <= desired_size <= max_size."
+    }
+  }
+}

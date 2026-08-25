@@ -142,7 +142,7 @@ Project implementation started on August 25, 2026.
 
 Current stage:
 ```
-Phase 6A — Foundational EKS managed add-ons
+Phase 6B — Private EKS managed worker capacity
 ```
 ## Documentation
 
