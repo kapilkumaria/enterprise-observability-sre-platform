@@ -94,3 +94,28 @@ variable "control_plane_log_retention_days" {
     error_message = "The log retention period must be supported by CloudWatch Logs."
   }
 }
+
+variable "pod_identity_agent_version" {
+  description = "EKS-compatible version of the Pod Identity Agent add-on."
+  type        = string
+}
+
+variable "vpc_cni_version" {
+  description = "EKS-compatible version of the Amazon VPC CNI add-on."
+  type        = string
+}
+
+variable "kube_proxy_version" {
+  description = "EKS-compatible version of the kube-proxy add-on."
+  type        = string
+}
+
+variable "vpc_cni_role_arn" {
+  description = "ARN of the dedicated VPC CNI Pod Identity IAM role."
+  type        = string
+
+  validation {
+    condition     = can(regex("^arn:aws:iam::[0-9]{12}:role/", var.vpc_cni_role_arn))
+    error_message = "The VPC CNI role must be a valid IAM role ARN."
+  }
+}

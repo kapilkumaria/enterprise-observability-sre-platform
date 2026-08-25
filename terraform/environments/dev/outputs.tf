@@ -112,3 +112,18 @@ output "eks_control_plane_log_group_name" {
   description = "CloudWatch log group receiving EKS control-plane logs."
   value       = module.eks.control_plane_log_group_name
 }
+
+output "pod_identity_agent_version" {
+  description = "Installed EKS Pod Identity Agent version."
+  value       = module.eks.pod_identity_agent_version
+}
+
+output "vpc_cni_version" {
+  description = "Installed Amazon VPC CNI version."
+  value       = module.eks.vpc_cni_version
+}
+
+output "kube_proxy_version" {
+  description = "Installed kube-proxy version."
+  value       = module.eks.kube_proxy_version
+}

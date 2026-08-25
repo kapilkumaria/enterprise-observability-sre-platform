@@ -33,6 +33,10 @@ module "eks" {
   cluster_public_access_cidrs      = var.cluster_public_access_cidrs
   admin_principal_arn              = data.aws_caller_identity.current.arn
   control_plane_log_retention_days = var.control_plane_log_retention_days
+  pod_identity_agent_version       = var.pod_identity_agent_version
+  vpc_cni_version                  = var.vpc_cni_version
+  kube_proxy_version               = var.kube_proxy_version
+  vpc_cni_role_arn                 = module.iam.vpc_cni_role_arn
 
   depends_on = [
     module.iam

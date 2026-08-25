@@ -78,3 +78,21 @@ variable "control_plane_log_retention_days" {
   type        = number
   default     = 30
 }
+
+variable "pod_identity_agent_version" {
+  description = "EKS Pod Identity Agent version compatible with EKS 1.36."
+  type        = string
+  default     = "v1.3.10-eksbuild.3"
+}
+
+variable "vpc_cni_version" {
+  description = "Amazon VPC CNI version compatible with EKS 1.36."
+  type        = string
+  default     = "v1.22.4-eksbuild.3"
+}
+
+variable "kube_proxy_version" {
+  description = "kube-proxy version compatible with EKS 1.36."
+  type        = string
+  default     = "v1.36.0-eksbuild.14"
+}

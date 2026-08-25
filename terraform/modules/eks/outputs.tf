@@ -53,3 +53,18 @@ output "administrator_access_entry_arn" {
   description = "ARN of the administrator EKS Access Entry."
   value       = aws_eks_access_entry.administrator.access_entry_arn
 }
+
+output "pod_identity_agent_version" {
+  description = "Installed EKS Pod Identity Agent version."
+  value       = aws_eks_addon.pod_identity_agent.addon_version
+}
+
+output "vpc_cni_version" {
+  description = "Installed Amazon VPC CNI version."
+  value       = aws_eks_addon.vpc_cni.addon_version
+}
+
+output "kube_proxy_version" {
+  description = "Installed kube-proxy version."
+  value       = aws_eks_addon.kube_proxy.addon_version
+}

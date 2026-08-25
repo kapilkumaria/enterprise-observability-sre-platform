@@ -142,7 +142,7 @@ Project implementation started on August 25, 2026.
 
 Current stage:
 ```
-Phase 5 — Amazon EKS control-plane foundation
+Phase 6A — Foundational EKS managed add-ons
 ```
 ## Documentation
 

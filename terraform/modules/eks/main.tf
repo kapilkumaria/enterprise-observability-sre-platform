@@ -105,3 +105,57 @@ resource "aws_eks_access_policy_association" "administrator" {
     type = "cluster"
   }
 }
+
+resource "aws_eks_addon" "pod_identity_agent" {
+  cluster_name  = aws_eks_cluster.this.name
+  addon_name    = "eks-pod-identity-agent"
+  addon_version = var.pod_identity_agent_version
+
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "PRESERVE"
+
+  tags = {
+    Name        = "${local.name_prefix}-pod-identity-agent"
+    Purpose     = "EKS Pod Identity credentials"
+    ClusterName = var.cluster_name
+  }
+}
+
+resource "aws_eks_addon" "vpc_cni" {
+  cluster_name  = aws_eks_cluster.this.name
+  addon_name    = "vpc-cni"
+  addon_version = var.vpc_cni_version
+
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "PRESERVE"
+
+  pod_identity_association {
+    role_arn        = var.vpc_cni_role_arn
+    service_account = "aws-node"
+  }
+
+  depends_on = [
+    aws_eks_addon.pod_identity_agent
+  ]
+
+  tags = {
+    Name        = "${local.name_prefix}-vpc-cni"
+    Purpose     = "Kubernetes Pod networking"
+    ClusterName = var.cluster_name
+  }
+}
+
+resource "aws_eks_addon" "kube_proxy" {
+  cluster_name  = aws_eks_cluster.this.name
+  addon_name    = "kube-proxy"
+  addon_version = var.kube_proxy_version
+
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "PRESERVE"
+
+  tags = {
+    Name        = "${local.name_prefix}-kube-proxy"
+    Purpose     = "Kubernetes service networking"
+    ClusterName = var.cluster_name
+  }
+}
