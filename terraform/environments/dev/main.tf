@@ -47,6 +47,10 @@ module "eks" {
   node_group_min_size              = var.node_group_min_size
   node_group_max_size              = var.node_group_max_size
 
+  coredns_version  = var.coredns_version
+  ebs_csi_version  = var.ebs_csi_version
+  ebs_csi_role_arn = module.iam.ebs_csi_role_arn
+
   depends_on = [
     module.iam
   ]

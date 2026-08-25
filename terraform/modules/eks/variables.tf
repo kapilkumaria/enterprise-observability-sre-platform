@@ -199,3 +199,23 @@ variable "node_group_max_size" {
     error_message = "The maximum node-group size must be greater than or equal to its minimum size."
   }
 }
+
+variable "coredns_version" {
+  description = "EKS-compatible version of the CoreDNS managed add-on."
+  type        = string
+}
+
+variable "ebs_csi_version" {
+  description = "EKS-compatible version of the Amazon EBS CSI managed add-on."
+  type        = string
+}
+
+variable "ebs_csi_role_arn" {
+  description = "ARN of the dedicated EBS CSI Pod Identity IAM role."
+  type        = string
+
+  validation {
+    condition     = can(regex("^arn:aws:iam::[0-9]{12}:role/", var.ebs_csi_role_arn))
+    error_message = "The EBS CSI role must be a valid IAM role ARN."
+  }
+}

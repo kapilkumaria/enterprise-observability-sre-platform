@@ -142,7 +142,7 @@ Project implementation started on August 25, 2026.
 
 Current stage:
 ```
-Phase 6B — Private EKS managed worker capacity
+Phase 6C — EKS DNS and persistent-storage foundation
 ```
 ## Documentation
 

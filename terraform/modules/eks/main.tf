@@ -214,3 +214,47 @@ resource "aws_eks_node_group" "system" {
     }
   }
 }
+
+resource "aws_eks_addon" "coredns" {
+  cluster_name  = aws_eks_cluster.this.name
+  addon_name    = "coredns"
+  addon_version = var.coredns_version
+
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "PRESERVE"
+
+  tags = {
+    Name        = "${local.name_prefix}-coredns"
+    Purpose     = "Kubernetes cluster DNS"
+    ClusterName = var.cluster_name
+  }
+
+  depends_on = [
+    aws_eks_node_group.system
+  ]
+}
+
+resource "aws_eks_addon" "ebs_csi" {
+  cluster_name  = aws_eks_cluster.this.name
+  addon_name    = "aws-ebs-csi-driver"
+  addon_version = var.ebs_csi_version
+
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "PRESERVE"
+
+  pod_identity_association {
+    role_arn        = var.ebs_csi_role_arn
+    service_account = "ebs-csi-controller-sa"
+  }
+
+  tags = {
+    Name        = "${local.name_prefix}-ebs-csi"
+    Purpose     = "Kubernetes persistent EBS storage"
+    ClusterName = var.cluster_name
+  }
+
+  depends_on = [
+    aws_eks_node_group.system,
+    aws_eks_addon.pod_identity_agent
+  ]
+}

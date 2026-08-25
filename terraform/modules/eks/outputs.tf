@@ -98,3 +98,13 @@ output "node_group_scaling_config" {
   description = "Scaling configuration of the EKS managed node group."
   value       = aws_eks_node_group.system.scaling_config
 }
+
+output "coredns_version" {
+  description = "Installed CoreDNS managed add-on version."
+  value       = aws_eks_addon.coredns.addon_version
+}
+
+output "ebs_csi_version" {
+  description = "Installed Amazon EBS CSI managed add-on version."
+  value       = aws_eks_addon.ebs_csi.addon_version
+}

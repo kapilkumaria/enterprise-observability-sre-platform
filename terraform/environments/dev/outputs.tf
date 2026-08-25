@@ -157,3 +157,13 @@ output "node_group_scaling_config" {
   description = "Scaling configuration of the managed node group."
   value       = module.eks.node_group_scaling_config
 }
+
+output "coredns_version" {
+  description = "Installed CoreDNS managed add-on version."
+  value       = module.eks.coredns_version
+}
+
+output "ebs_csi_version" {
+  description = "Installed Amazon EBS CSI managed add-on version."
+  value       = module.eks.ebs_csi_version
+}

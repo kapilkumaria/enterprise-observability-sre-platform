@@ -144,3 +144,15 @@ variable "node_group_max_size" {
   type        = number
   default     = 4
 }
+
+variable "coredns_version" {
+  description = "CoreDNS version compatible with EKS 1.36."
+  type        = string
+  default     = "v1.14.3-eksbuild.3"
+}
+
+variable "ebs_csi_version" {
+  description = "Amazon EBS CSI Driver version compatible with EKS 1.36."
+  type        = string
+  default     = "v1.64.0-eksbuild.1"
+}
