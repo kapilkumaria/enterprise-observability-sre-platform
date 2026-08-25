@@ -10,3 +10,11 @@ module "networking" {
   private_subnet_cidrs    = var.private_subnet_cidrs
   flow_log_retention_days = var.flow_log_retention_days
 }
+
+module "iam" {
+  source = "../../modules/iam"
+
+  project_name = var.project_name
+  environment  = var.environment
+  cluster_name = var.cluster_name
+}

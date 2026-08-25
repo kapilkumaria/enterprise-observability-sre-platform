@@ -47,3 +47,23 @@ output "vpc_flow_log_group_name" {
   description = "CloudWatch log group receiving VPC Flow Logs."
   value       = module.networking.vpc_flow_log_group_name
 }
+
+output "eks_cluster_role_arn" {
+  description = "ARN of the EKS cluster role."
+  value       = module.iam.eks_cluster_role_arn
+}
+
+output "eks_node_role_arn" {
+  description = "ARN of the EKS managed-node role."
+  value       = module.iam.eks_node_role_arn
+}
+
+output "vpc_cni_role_arn" {
+  description = "ARN of the VPC CNI Pod Identity role."
+  value       = module.iam.vpc_cni_role_arn
+}
+
+output "ebs_csi_role_arn" {
+  description = "ARN of the EBS CSI Pod Identity role."
+  value       = module.iam.ebs_csi_role_arn
+}
