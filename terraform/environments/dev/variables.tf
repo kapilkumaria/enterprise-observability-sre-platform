@@ -156,3 +156,9 @@ variable "ebs_csi_version" {
   type        = string
   default     = "v1.64.0-eksbuild.1"
 }
+
+variable "metrics_server_version" {
+  description = "Metrics Server version compatible with EKS 1.36."
+  type        = string
+  default     = "v0.9.0-eksbuild.6"
+}

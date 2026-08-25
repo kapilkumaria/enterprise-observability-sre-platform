@@ -219,3 +219,8 @@ variable "ebs_csi_role_arn" {
     error_message = "The EBS CSI role must be a valid IAM role ARN."
   }
 }
+
+variable "metrics_server_version" {
+  description = "EKS-compatible version of the Metrics Server managed add-on."
+  type        = string
+}

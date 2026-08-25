@@ -108,3 +108,8 @@ output "ebs_csi_version" {
   description = "Installed Amazon EBS CSI managed add-on version."
   value       = aws_eks_addon.ebs_csi.addon_version
 }
+
+output "metrics_server_version" {
+  description = "Installed Metrics Server managed add-on version."
+  value       = aws_eks_addon.metrics_server.addon_version
+}

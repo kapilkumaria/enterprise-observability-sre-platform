@@ -258,3 +258,43 @@ resource "aws_eks_addon" "ebs_csi" {
     aws_eks_addon.pod_identity_agent
   ]
 }
+
+resource "aws_eks_addon" "metrics_server" {
+  cluster_name  = aws_eks_cluster.this.name
+  addon_name    = "metrics-server"
+  addon_version = var.metrics_server_version
+
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "PRESERVE"
+
+  configuration_values = jsonencode({
+    replicas = 2
+
+    resources = {
+      requests = {
+        cpu    = "100m"
+        memory = "200Mi"
+      }
+      limits = {
+        cpu    = "500m"
+        memory = "512Mi"
+      }
+    }
+
+    podDisruptionBudget = {
+      enabled        = true
+      maxUnavailable = 1
+    }
+  })
+
+  tags = {
+    Name        = "${local.name_prefix}-metrics-server"
+    Purpose     = "Kubernetes resource metrics API"
+    ClusterName = var.cluster_name
+  }
+
+  depends_on = [
+    aws_eks_node_group.system,
+    aws_eks_addon.coredns
+  ]
+}

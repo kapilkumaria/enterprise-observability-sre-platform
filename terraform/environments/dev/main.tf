@@ -51,6 +51,8 @@ module "eks" {
   ebs_csi_version  = var.ebs_csi_version
   ebs_csi_role_arn = module.iam.ebs_csi_role_arn
 
+  metrics_server_version = var.metrics_server_version
+
   depends_on = [
     module.iam
   ]
