@@ -1,0 +1,91 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Terraform generated files
+.terraform.lock.hcl.backup
+tfplan
+plan.out
+
+# Kubernetes and Helm
+*.kubeconfig
+kubeconfig
+values.local.yaml
+secrets.yaml
+*-secret.yaml
+
+# Credentials and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials
+credentials.json
+secret.auto.tfvars
+*.secret
+*.secrets
+
+# AWS
+.aws/
+aws-creds*
+
+# Generated artifacts
+artifacts/
+reports/
+coverage/
+dist/
+build/
+tmp/
+.cache/
+
+# Logs
+*.log
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Operating systems
+.DS_Store
+Thumbs.db
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# k6
+load-testing/results/
+*.json.gz
+
+# Grafana local data
+grafana-data/
+
+# Documentation rendering
+docs/rendered/
