@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: observability-container-limits
+  namespace: observability
+  labels:
+    app.kubernetes.io/component: resource-governance
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 100m
+        memory: 128Mi
+      default:
+        cpu: 1
+        memory: 1Gi
+      min:
+        cpu: 10m
+        memory: 16Mi
+      max:
+        cpu: "4"
+        memory: 8Gi
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: opentelemetry-container-limits
+  namespace: opentelemetry
+  labels:
+    app.kubernetes.io/component: resource-governance
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 100m
+        memory: 128Mi
+      default:
+        cpu: 1
+        memory: 1Gi
+      min:
+        cpu: 10m
+        memory: 16Mi
+      max:
+        cpu: "4"
+        memory: 6Gi
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: applications-container-limits
+  namespace: applications
+  labels:
+    app.kubernetes.io/component: resource-governance
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 50m
+        memory: 64Mi
+      default:
+        cpu: 500m
+        memory: 512Mi
+      min:
+        cpu: 10m
+        memory: 16Mi
+      max:
+        cpu: "2"
+        memory: 4Gi

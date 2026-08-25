@@ -142,7 +142,7 @@ Project implementation started on August 25, 2026.
 
 Current stage:
 ```
-Phase 6C — EKS DNS and persistent-storage foundation
+Phase 7A — Kubernetes platform governance baseline
 ```
 ## Documentation
 
