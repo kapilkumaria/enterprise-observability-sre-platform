@@ -142,7 +142,7 @@ Project implementation started on August 25, 2026.
 
 Current stage:
 ```
-Phase 1 — Repository and project foundation
+Phase 2 — Secure Terraform remote-state bootstrap
 ```
 ## Documentation
 
