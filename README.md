@@ -142,7 +142,7 @@ Project implementation started on August 25, 2026.
 
 Current stage:
 ```
-Phase 7B — Kubernetes resource metrics foundation
+Phase 7C — Kubernetes network isolation
 ```
 ## Documentation
 
