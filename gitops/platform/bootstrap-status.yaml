@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: observability-platform-gitops-status
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: observability-platform-gitops-status
+    app.kubernetes.io/part-of: enterprise-observability-sre-platform
+    app.kubernetes.io/managed-by: argocd
+data:
+  reconciliation: enabled
+  repository: enterprise-observability-sre-platform
+  environment: dev
+  ownership: gitops

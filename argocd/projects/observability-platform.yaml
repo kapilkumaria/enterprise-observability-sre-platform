@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: observability-platform
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: observability-platform
+    app.kubernetes.io/part-of: enterprise-observability-sre-platform
+    app.kubernetes.io/managed-by: kubectl
+spec:
+  description: GitOps project for the enterprise observability and SRE platform
+
+  sourceRepos:
+    - https://github.com/kapilkumaria/enterprise-observability-sre-platform.git
+
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: argocd
+    - server: https://kubernetes.default.svc
+      namespace: applications
+    - server: https://kubernetes.default.svc
+      namespace: observability
+    - server: https://kubernetes.default.svc
+      namespace: opentelemetry
+
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"
+
+  orphanedResources:
+    warn: true
