@@ -129,6 +129,10 @@ resource "aws_eks_addon" "vpc_cni" {
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "PRESERVE"
 
+  configuration_values = jsonencode({
+    enableNetworkPolicy = "true"
+  })
+
   pod_identity_association {
     role_arn        = var.vpc_cni_role_arn
     service_account = "aws-node"
