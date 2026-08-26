@@ -1,0 +1,149 @@
+global:
+  logging:
+    format: json
+    level: info
+
+  networkPolicy:
+    create: false
+
+controller:
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+
+  metrics:
+    enabled: true
+    service:
+      type: ClusterIP
+    serviceMonitor:
+      enabled: false
+
+server:
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: false
+
+  metrics:
+    enabled: true
+    service:
+      type: ClusterIP
+    serviceMonitor:
+      enabled: false
+
+repoServer:
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+  emptyDir:
+    sizeLimit: 2Gi
+
+  metrics:
+    enabled: true
+    service:
+      type: ClusterIP
+    serviceMonitor:
+      enabled: false
+
+applicationSet:
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+
+  metrics:
+    enabled: true
+    service:
+      type: ClusterIP
+    serviceMonitor:
+      enabled: false
+
+notifications:
+  enabled: true
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
+  metrics:
+    enabled: true
+    service:
+      type: ClusterIP
+    serviceMonitor:
+      enabled: false
+
+dex:
+  enabled: false
+
+redis:
+  enabled: true
+
+  containerSecurityContext:
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: false
+
+redisSecretInit:
+  enabled: true
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+redis-ha:
+  enabled: false
