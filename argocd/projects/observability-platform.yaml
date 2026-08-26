@@ -32,4 +32,4 @@ spec:
       kind: "*"
 
   orphanedResources:
-    warn: true
+    warn: false
