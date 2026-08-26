@@ -3,3 +3,5 @@ kind: Kustomization
 
 resources:
   - bootstrap-status.yaml
+  - platform-baseline-application.yaml
+  - network-isolation-application.yaml
