@@ -97,3 +97,16 @@ Before installation, the chart is checked for:
 - Private Services only
 - No plaintext credentials
 - Expected node-exporter Pod Security exception only
+
+## kube-system access
+
+The Argo CD `observability-platform` AppProject explicitly permits the
+`kube-system` destination because kube-prometheus-stack creates metrics
+discovery resources for EKS system components there.
+
+The current configuration uses this access for CoreDNS monitoring. The
+chart creates a metrics Service that selects the existing EKS CoreDNS
+pods and exposes their TCP 9153 metrics endpoint to Prometheus.
+
+The AppProject does not use a wildcard destination. Each permitted
+namespace is listed explicitly.
