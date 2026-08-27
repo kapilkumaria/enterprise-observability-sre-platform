@@ -1,0 +1,6 @@
+repository: https://grafana.github.io/helm-charts
+chart: loki
+chartVersion: 7.3.0
+applicationVersion: 3.6.12
+namespace: observability
+syncWave: "40"

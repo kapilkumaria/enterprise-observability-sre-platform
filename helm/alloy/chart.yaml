@@ -1,0 +1,6 @@
+repository: https://grafana.github.io/helm-charts
+chart: alloy
+chartVersion: 1.12.1
+applicationVersion: v1.19.2
+namespace: observability
+syncWave: "45"
