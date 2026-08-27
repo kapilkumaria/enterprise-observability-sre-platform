@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: monitoring-system-default-deny
+  namespace: monitoring-system
+  labels:
+    app.kubernetes.io/name: monitoring-system-default-deny
+    app.kubernetes.io/component: network-security
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  podSelector: {}
+
+  policyTypes:
+    - Ingress
+    - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-prometheus-node-exporter-scraping
+  namespace: monitoring-system
+  labels:
+    app.kubernetes.io/name: allow-prometheus-node-exporter-scraping
+    app.kubernetes.io/component: network-security
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: kube-prometheus-stack
+      app.kubernetes.io/name: prometheus-node-exporter
+
+  policyTypes:
+    - Ingress
+
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
+              operator.prometheus.io/name: kube-prometheus-stack-prometheus
+      ports:
+        - protocol: TCP
+          port: 9100

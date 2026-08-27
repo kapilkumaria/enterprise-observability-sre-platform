@@ -20,6 +20,8 @@ spec:
     - server: https://kubernetes.default.svc
       namespace: kube-system
     - server: https://kubernetes.default.svc
+      namespace: monitoring-system
+    - server: https://kubernetes.default.svc
       namespace: applications
     - server: https://kubernetes.default.svc
       namespace: observability

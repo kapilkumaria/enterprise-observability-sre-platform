@@ -69,3 +69,27 @@ spec:
       max:
         cpu: "2"
         memory: 4Gi
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: monitoring-system-container-limits
+  namespace: monitoring-system
+  labels:
+    app.kubernetes.io/component: resource-governance
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 50m
+        memory: 64Mi
+      default:
+        cpu: 200m
+        memory: 256Mi
+      min:
+        cpu: 10m
+        memory: 16Mi
+      max:
+        cpu: "1"
+        memory: 1Gi

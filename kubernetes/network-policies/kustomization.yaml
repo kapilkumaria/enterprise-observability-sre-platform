@@ -10,3 +10,4 @@ resources:
   - allow-prometheus-node-scraping.yaml
   - allow-prometheus-coredns-scraping.yaml
   - allow-prometheus-operator-webhook.yaml
+  - monitoring-system-node-exporter.yaml

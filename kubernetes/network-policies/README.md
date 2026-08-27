@@ -135,3 +135,22 @@ TCP 10250.
 The existing `allow-dns-egress` policy permits TCP and UDP port 53 to
 CoreDNS. All monitoring workloads remain subject to the namespace
 default-deny policy.
+
+## Dedicated node-exporter namespace
+
+Prometheus node-exporter requires host namespaces, hostPath mounts and a
+host port. These capabilities are rejected by both the Kubernetes Pod
+Security Baseline and Restricted profiles.
+
+Node-exporter is therefore isolated in the `monitoring-system` namespace.
+That namespace enforces the Privileged profile while continuing to audit
+and warn against the Restricted profile.
+
+The exception does not weaken the `observability` namespace. Prometheus,
+Alertmanager, Grafana, kube-state-metrics and the Prometheus Operator
+continue to run under Baseline enforcement with Restricted auditing and
+warnings.
+
+The `monitoring-system-default-deny` policy isolates the namespace. The
+`allow-prometheus-node-exporter-scraping` policy permits Prometheus to
+reach node-exporter on TCP 9100.
