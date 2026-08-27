@@ -133,6 +133,10 @@ grafana:
   initChownData:
     enabled: false
 
+  extraEmptyDirMounts:
+    - name: grafana-tmp
+      mountPath: /tmp
+
   resources:
     requests:
       cpu: 100m

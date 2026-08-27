@@ -46,6 +46,17 @@ The chart expects this runtime Secret in the `observability` namespace:
 
 The Secret is intentionally not stored in Git.
 
+## Grafana plugin runtime
+
+Grafana keeps its container root filesystem read-only. Grafana 13
+bundled backend plugins, including Prometheus, Loki, Tempo and Jaeger,
+require writable temporary storage during plugin startup.
+
+A dedicated ephemeral `emptyDir` is mounted at `/tmp`. This allows
+backend plugins to create temporary handshake files without weakening
+the container-level `readOnlyRootFilesystem` control. No credentials or
+persistent application data are stored in this temporary volume.
+
 ## Node-exporter security exception
 
 Prometheus node-exporter requires read-only access to host operating-system
