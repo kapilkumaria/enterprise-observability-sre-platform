@@ -192,6 +192,17 @@ grafana:
       enabled: true
       defaultDatasourceEnabled: true
 
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      uid: loki
+      url: http://loki-gateway.observability.svc.cluster.local
+      access: proxy
+      isDefault: false
+      editable: false
+      jsonData:
+        maxLines: 1000
+
   serviceMonitor:
     enabled: true
 

@@ -57,6 +57,19 @@ backend plugins to create temporary handshake files without weakening
 the container-level `readOnlyRootFilesystem` control. No credentials or
 persistent application data are stored in this temporary volume.
 
+## Grafana datasources
+
+Grafana provisions its datasources declaratively through the
+kube-prometheus-stack datasource ConfigMap:
+
+- Prometheus is the default metrics datasource.
+- Alertmanager provides alert-state integration.
+- Loki provides centralized LogQL access through the internal
+  `loki-gateway` ClusterIP Service.
+
+The Loki datasource is read-only from Grafana's provisioning
+perspective and is not exposed through an external service.
+
 ## Node-exporter security exception
 
 Prometheus node-exporter requires read-only access to host operating-system
