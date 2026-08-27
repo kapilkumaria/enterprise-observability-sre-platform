@@ -5,3 +5,8 @@ resources:
   - default-deny.yaml
   - allow-dns-egress.yaml
   - allow-otlp.yaml
+  - allow-observability-internal.yaml
+  - allow-observability-kubernetes-api.yaml
+  - allow-prometheus-node-scraping.yaml
+  - allow-prometheus-coredns-scraping.yaml
+  - allow-prometheus-operator-webhook.yaml

@@ -88,3 +88,50 @@ Validation proved:
 Additional least-privilege policies will be introduced as Prometheus, Grafana, Alertmanager, Loki and OpenTelemetry components are deployed.
 
 Broad same-namespace access should not be introduced as a replacement for workload-specific policies.
+
+## Monitoring-stack policies
+
+The `observability` namespace uses a default-deny ingress and egress
+posture. The kube-prometheus-stack receives only the traffic required
+for monitoring operations.
+
+### Internal monitoring traffic
+
+`allow-observability-internal` permits communication between pods within
+the `observability` namespace. This supports communication among
+Prometheus, Alertmanager, Grafana, kube-state-metrics and the Prometheus
+Operator without permitting ingress from other application namespaces.
+
+### Kubernetes API access
+
+`allow-observability-kubernetes-api` permits TCP 443 egress to the
+Kubernetes Service CIDR and the private platform VPC CIDR. This is
+required by the Prometheus Operator, kube-state-metrics, Prometheus and
+Grafana sidecars for Kubernetes API discovery and reconciliation.
+
+The rule does not permit general internet egress.
+
+### Node and kubelet scraping
+
+`allow-prometheus-node-scraping` permits only Prometheus pods to reach
+TCP ports 9100 and 10250 inside the platform VPC:
+
+- TCP 9100 for node-exporter
+- TCP 10250 for kubelet metrics
+
+### CoreDNS scraping
+
+`allow-prometheus-coredns-scraping` permits only Prometheus pods to reach
+CoreDNS pods in `kube-system` on TCP 9153.
+
+### Prometheus Operator webhook
+
+`allow-prometheus-operator-webhook` permits the private Kubernetes
+control plane to reach the Prometheus Operator admission webhook on
+TCP 10250.
+
+### Existing DNS access
+
+The existing `allow-dns-egress` policy permits TCP and UDP port 53 to
+CoreDNS. All monitoring workloads remain subject to the namespace
+default-deny policy.
