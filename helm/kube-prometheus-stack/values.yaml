@@ -278,6 +278,8 @@ kube-state-metrics:
       type: RuntimeDefault
 
 prometheus-node-exporter:
+  namespaceOverride: monitoring-system
+
   resources:
     requests:
       cpu: 50m
@@ -326,6 +328,14 @@ prometheus:
 
     serviceMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelector: {}
+
+    serviceMonitorNamespaceSelector:
+      matchExpressions:
+        - key: platform.kapilkumaria.com/tier
+          operator: In
+          values:
+            - observability
+            - host-monitoring
 
     podMonitorSelectorNilUsesHelmValues: false
     podMonitorSelector: {}

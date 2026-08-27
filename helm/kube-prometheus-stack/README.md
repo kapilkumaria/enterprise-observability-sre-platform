@@ -69,9 +69,20 @@ Its container remains hardened with:
 - Read-only host mounts
 - Explicit CPU and memory requests and limits
 
-The `observability` namespace enforces the Pod Security Baseline profile
-and audits/warns against Restricted. This permits the required host
-metrics collector while still surfacing the exception for review.
+Node-exporter runs in the dedicated `monitoring-system` namespace. That
+namespace enforces the Pod Security Privileged profile because the
+collector requires host namespaces, hostPath mounts and a host port. It
+continues to audit and warn against the Restricted profile.
+
+The remaining monitoring components stay in `observability`, which
+continues to enforce the Baseline profile and audit/warn against
+Restricted. The node-exporter ServiceMonitor is colocated with its
+Service in `monitoring-system`.
+
+Prometheus discovers ServiceMonitors only in namespaces whose platform
+tier is `observability` or `host-monitoring`. This includes the dedicated
+node-exporter namespace without enabling unrestricted cluster-wide
+ServiceMonitor discovery.
 
 ## Storage
 
