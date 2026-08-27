@@ -5,3 +5,4 @@ resources:
   - bootstrap-status.yaml
   - platform-baseline-application.yaml
   - network-isolation-application.yaml
+  - kube-prometheus-stack-application.yaml
