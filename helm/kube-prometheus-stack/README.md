@@ -66,9 +66,12 @@ kube-prometheus-stack datasource ConfigMap:
 - Alertmanager provides alert-state integration.
 - Loki provides centralized LogQL access through the internal
   `loki-gateway` ClusterIP Service.
+- Jaeger provides distributed-trace querying through the internal
+  `jaeger` ClusterIP Service in the `opentelemetry` namespace.
 
-The Loki datasource is read-only from Grafana's provisioning
-perspective and is not exposed through an external service.
+The Loki and Jaeger datasources are read-only from Grafana's
+provisioning perspective. Neither backend is exposed through an
+external service.
 
 ## Node-exporter security exception
 
