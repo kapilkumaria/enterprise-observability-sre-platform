@@ -105,6 +105,30 @@ collector phase is implemented.
 
 Jaeger has no general internet egress permission.
 
+## Grafana Alloy collector policies
+
+The central Alloy collector runs in the `opentelemetry` namespace with
+the workload label:
+
+    app.kubernetes.io/component: collector
+
+Existing OTLP policies permit only opted-in application pods to reach
+the collector on TCP 4317 and TCP 4318.
+
+Additional policies permit:
+
+- Alloy collector egress to Jaeger on TCP 4317
+- Jaeger ingress from Alloy on TCP 4317
+- Prometheus egress to Alloy on TCP 12345
+- Alloy metrics ingress from Prometheus on TCP 12345
+
+The Alloy-to-Jaeger egress policy includes the Kubernetes Service CIDR
+because the Amazon VPC CNI network-policy datapath can evaluate the
+ClusterIP before service translation.
+
+The collector has no unrestricted internet egress and no Kubernetes API
+egress permission.
+
 ## Future extensions
 
 Additional least-privilege policies will be introduced as Prometheus, Grafana, Alertmanager, Loki and OpenTelemetry components are deployed.

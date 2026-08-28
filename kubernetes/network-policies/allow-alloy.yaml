@@ -1,0 +1,121 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-alloy-jaeger-otlp-egress
+  namespace: opentelemetry
+  labels:
+    app.kubernetes.io/name: allow-alloy-jaeger-otlp-egress
+    app.kubernetes.io/component: network-security
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: alloy
+      app.kubernetes.io/instance: alloy-collector
+      app.kubernetes.io/component: collector
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: jaeger
+              app.kubernetes.io/instance: jaeger
+              app.kubernetes.io/component: all-in-one
+      ports:
+        - protocol: TCP
+          port: 4317
+    - to:
+        - ipBlock:
+            cidr: 172.20.0.0/16
+      ports:
+        - protocol: TCP
+          port: 4317
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-alloy-jaeger-otlp-ingress
+  namespace: opentelemetry
+  labels:
+    app.kubernetes.io/name: allow-alloy-jaeger-otlp-ingress
+    app.kubernetes.io/component: network-security
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: jaeger
+      app.kubernetes.io/instance: jaeger
+      app.kubernetes.io/component: all-in-one
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: alloy
+              app.kubernetes.io/instance: alloy-collector
+              app.kubernetes.io/component: collector
+      ports:
+        - protocol: TCP
+          port: 4317
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-prometheus-alloy-metrics-egress
+  namespace: observability
+  labels:
+    app.kubernetes.io/name: allow-prometheus-alloy-metrics-egress
+    app.kubernetes.io/component: network-security
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus
+      operator.prometheus.io/name: kube-prometheus-stack-prometheus
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: opentelemetry
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: alloy
+              app.kubernetes.io/instance: alloy-collector
+              app.kubernetes.io/component: collector
+      ports:
+        - protocol: TCP
+          port: 12345
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-prometheus-alloy-metrics-ingress
+  namespace: opentelemetry
+  labels:
+    app.kubernetes.io/name: allow-prometheus-alloy-metrics-ingress
+    app.kubernetes.io/component: network-security
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: alloy
+      app.kubernetes.io/instance: alloy-collector
+      app.kubernetes.io/component: collector
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
+              operator.prometheus.io/name: kube-prometheus-stack-prometheus
+      ports:
+        - protocol: TCP
+          port: 12345
