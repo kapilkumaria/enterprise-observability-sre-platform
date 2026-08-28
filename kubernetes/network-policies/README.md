@@ -83,6 +83,28 @@ Validation proved:
 - Temporary validation resources were removed.
 - Live policies matched the repository with zero diff.
 
+## Jaeger tracing policies
+
+Jaeger runs in the `opentelemetry` namespace behind the namespace
+default-deny policy.
+
+The tracing backend permits only these cross-namespace flows:
+
+- Prometheus in `observability` may scrape Jaeger on TCP 8888.
+- Grafana in `observability` may query Jaeger on TCP 16686.
+
+Both flows use workload and namespace selectors. Grafana's egress rule
+also permits TCP 16686 to the Kubernetes Service CIDR because the Amazon
+VPC CNI network-policy datapath can evaluate ClusterIP traffic before
+service translation.
+
+OTLP ingestion ports TCP 4317 and TCP 4318 are not opened directly to
+application workloads in this phase. Applications will send OTLP to
+Grafana Alloy, and Alloy will forward traces to Jaeger after the
+collector phase is implemented.
+
+Jaeger has no general internet egress permission.
+
 ## Future extensions
 
 Additional least-privilege policies will be introduced as Prometheus, Grafana, Alertmanager, Loki and OpenTelemetry components are deployed.

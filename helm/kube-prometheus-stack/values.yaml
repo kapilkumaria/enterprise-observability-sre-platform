@@ -351,6 +351,7 @@ prometheus:
           values:
             - observability
             - host-monitoring
+            - telemetry
 
     podMonitorSelectorNilUsesHelmValues: false
     podMonitorSelector: {}

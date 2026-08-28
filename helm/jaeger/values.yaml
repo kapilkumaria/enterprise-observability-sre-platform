@@ -1,0 +1,84 @@
+# Jaeger v2 all-in-one tracing backend for the development platform.
+#
+# The chart's default in-memory storage configuration is intentionally
+# retained. Traces are ephemeral and disappear when the pod restarts.
+# Production environments should use a durable external storage backend.
+
+jaeger:
+  enabled: true
+  replicas: 1
+
+  serviceAccount:
+    automountServiceAccountToken: false
+
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: false
+
+  httproute:
+    enabled: false
+
+  podSecurityContext:
+    fsGroup: 10001
+    runAsGroup: 10001
+    runAsNonRoot: true
+    runAsUser: 10001
+    seccompProfile:
+      type: RuntimeDefault
+
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+  extraVolumes:
+    - name: temporary-data
+      emptyDir:
+        sizeLimit: 256Mi
+
+  extraVolumeMounts:
+    - name: temporary-data
+      mountPath: /tmp
+
+networkPolicy:
+  enabled: false
+
+extraObjects:
+  - apiVersion: monitoring.coreos.com/v1
+    kind: ServiceMonitor
+    metadata:
+      name: jaeger
+      namespace: opentelemetry
+      labels:
+        app.kubernetes.io/name: jaeger
+        app.kubernetes.io/instance: jaeger
+        app.kubernetes.io/component: monitoring
+        app.kubernetes.io/part-of: enterprise-observability-sre-platform
+    spec:
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: jaeger
+          app.kubernetes.io/instance: jaeger
+          app.kubernetes.io/component: all-in-one
+      namespaceSelector:
+        matchNames:
+          - opentelemetry
+      endpoints:
+        - port: internal-metrics
+          path: /metrics
+          interval: 30s
+          scrapeTimeout: 10s
