@@ -57,3 +57,15 @@ module "eks" {
     module.iam
   ]
 }
+
+module "observability_demo_ecr" {
+  source = "../../modules/ecr"
+
+  repository_name               = "${var.project_name}/observability-demo"
+  image_tag_mutability          = "IMMUTABLE"
+  scan_on_push                  = true
+  encryption_type               = "AES256"
+  max_image_count               = 30
+  untagged_image_retention_days = 7
+  force_delete                  = false
+}
