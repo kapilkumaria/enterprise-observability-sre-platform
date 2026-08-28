@@ -129,6 +129,33 @@ ClusterIP before service translation.
 The collector has no unrestricted internet egress and no Kubernetes API
 egress permission.
 
+## Grafana Alloy logging-agent policies
+
+The `alloy-logs` release runs one logging agent per node as a DaemonSet
+in the `opentelemetry` namespace.
+
+The logging agents retrieve Kubernetes container logs through the
+Kubernetes pod log API rather than using a hostPath mount. This design
+remains compatible with Restricted Pod Security.
+
+The logging agents receive only these network permissions:
+
+- Kubernetes API egress on TCP 443 for pod discovery and pod-log reads
+- Loki gateway egress for log ingestion
+- Metrics ingress from Prometheus on TCP 12345
+
+The Loki egress rules account for both stages of Kubernetes Service
+routing:
+
+- TCP 80 to the Loki gateway ClusterIP
+- TCP 8080 to the selected Loki gateway pod
+
+The Service-CIDR rules are required because the Amazon VPC CNI
+network-policy datapath can evaluate ClusterIP traffic before service
+translation.
+
+The logging agents have no unrestricted internet egress.
+
 ## Future extensions
 
 Additional least-privilege policies will be introduced as Prometheus, Grafana, Alertmanager, Loki and OpenTelemetry components are deployed.

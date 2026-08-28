@@ -1,0 +1,213 @@
+global:
+  podSecurityContext:
+    fsGroup: 65534
+    runAsGroup: 65534
+    runAsNonRoot: true
+    runAsUser: 65534
+    seccompProfile:
+      type: RuntimeDefault
+
+crds:
+  create: false
+
+alloy:
+  configMap:
+    create: true
+    content: |-
+      logging {
+        level  = "info"
+        format = "logfmt"
+      }
+
+      discovery.kubernetes "pods" {
+        role = "pod"
+      }
+
+      discovery.relabel "pod_logs" {
+        targets = discovery.kubernetes.pods.targets
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_node_name"]
+          regex         = sys.env("HOSTNAME")
+          action        = "keep"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_namespace"]
+          target_label  = "namespace"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_name"]
+          target_label  = "pod"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_name"]
+          target_label  = "container"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_node_name"]
+          target_label  = "node"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+          regex         = "(.+)"
+          target_label  = "app"
+        }
+
+        rule {
+          source_labels = [
+            "__meta_kubernetes_namespace",
+            "__meta_kubernetes_pod_container_name",
+          ]
+          separator    = "/"
+          target_label = "job"
+        }
+      }
+
+      loki.source.kubernetes "pod_logs" {
+        targets    = discovery.relabel.pod_logs.output
+        forward_to = [loki.process.pod_logs.receiver]
+      }
+
+      loki.process "pod_logs" {
+        stage.cri {}
+
+        stage.static_labels {
+          values = {
+            cluster     = "enterprise-observability-dev",
+            environment = "dev",
+            platform    = "enterprise-observability",
+          }
+        }
+
+        stage.drop {
+          older_than          = "24h"
+          drop_counter_reason = "too_old"
+        }
+
+        forward_to = [loki.write.internal.receiver]
+      }
+
+      loki.write "internal" {
+        endpoint {
+          url = "http://loki-gateway.observability.svc.cluster.local/loki/api/v1/push"
+        }
+
+        external_labels = {
+          cluster     = "enterprise-observability-dev",
+          environment = "dev",
+        }
+      }
+
+  clustering:
+    enabled: false
+
+  stabilityLevel: generally-available
+  storagePath: /tmp/alloy
+  enableReporting: false
+
+  mounts:
+    varlog: false
+    dockercontainers: false
+    extra:
+      - name: alloy-storage
+        mountPath: /tmp/alloy
+
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsGroup: 65534
+    runAsNonRoot: true
+    runAsUser: 65534
+    seccompProfile:
+      type: RuntimeDefault
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 384Mi
+
+controller:
+  type: daemonset
+
+  hostNetwork: false
+  hostPID: false
+
+  podLabels:
+    app.kubernetes.io/component: log-collector
+
+  tolerations:
+    - operator: Exists
+
+  volumes:
+    extra:
+      - name: alloy-storage
+        emptyDir:
+          sizeLimit: 256Mi
+
+rbac:
+  create: false
+
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+
+service:
+  enabled: true
+  type: ClusterIP
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+
+networkPolicy:
+  enabled: false
+
+extraObjects:
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      name: alloy-logs
+      labels:
+        app.kubernetes.io/name: alloy
+        app.kubernetes.io/instance: alloy-logs
+        app.kubernetes.io/component: log-collector
+        app.kubernetes.io/part-of: enterprise-observability-sre-platform
+    rules:
+      - apiGroups:
+          - ""
+        resources:
+          - pods
+          - pods/log
+        verbs:
+          - get
+          - list
+          - watch
+
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: alloy-logs
+      labels:
+        app.kubernetes.io/name: alloy
+        app.kubernetes.io/instance: alloy-logs
+        app.kubernetes.io/component: log-collector
+        app.kubernetes.io/part-of: enterprise-observability-sre-platform
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: alloy-logs
+    subjects:
+      - kind: ServiceAccount
+        name: alloy-logs
+        namespace: opentelemetry

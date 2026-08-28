@@ -7,6 +7,7 @@ resources:
   - allow-otlp.yaml
   - allow-jaeger.yaml
   - allow-alloy.yaml
+  - allow-alloy-logs.yaml
   - allow-observability-internal.yaml
   - allow-observability-kubernetes-api.yaml
   - allow-prometheus-node-scraping.yaml

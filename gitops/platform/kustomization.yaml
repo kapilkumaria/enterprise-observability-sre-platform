@@ -9,3 +9,4 @@ resources:
   - loki-application.yaml
   - jaeger-application.yaml
   - alloy-application.yaml
+  - alloy-logs-application.yaml
