@@ -112,6 +112,17 @@ alloy:
       - name: alloy-storage
         mountPath: /tmp/alloy
 
+configReloader:
+  enabled: true
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 50Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
 controller:
   type: deployment
   replicas: 1
