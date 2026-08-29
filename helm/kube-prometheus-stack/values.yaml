@@ -202,6 +202,11 @@ grafana:
       editable: false
       jsonData:
         maxLines: 1000
+        derivedFields:
+          - name: TraceID
+            matcherRegex: '"trace_id":"([a-f0-9]{32})"'
+            datasourceUid: jaeger
+            url: '$${__value.raw}'
 
     - name: Jaeger
       type: jaeger

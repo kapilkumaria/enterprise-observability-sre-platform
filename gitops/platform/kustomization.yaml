@@ -12,3 +12,4 @@ resources:
   - alloy-logs-application.yaml
   - observability-demo-application.yaml
   - observability-demo-monitoring-application.yaml
+  - observability-demo-dashboard-application.yaml
