@@ -1,0 +1,61 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-prometheus-observability-demo-ingress
+  namespace: applications
+  labels:
+    app.kubernetes.io/name: allow-prometheus-observability-demo-ingress
+    app.kubernetes.io/component: network-security
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: observability-demo
+      app.kubernetes.io/instance: observability-demo
+
+  policyTypes:
+    - Ingress
+
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
+              operator.prometheus.io/name: kube-prometheus-stack-prometheus
+      ports:
+        - protocol: TCP
+          port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-prometheus-observability-demo-egress
+  namespace: observability
+  labels:
+    app.kubernetes.io/name: allow-prometheus-observability-demo-egress
+    app.kubernetes.io/component: network-security
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus
+      operator.prometheus.io/name: kube-prometheus-stack-prometheus
+
+  policyTypes:
+    - Egress
+
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: applications
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: observability-demo
+              app.kubernetes.io/instance: observability-demo
+      ports:
+        - protocol: TCP
+          port: 8080

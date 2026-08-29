@@ -14,3 +14,4 @@ resources:
   - allow-prometheus-coredns-scraping.yaml
   - allow-prometheus-operator-webhook.yaml
   - monitoring-system-node-exporter.yaml
+  - observability-demo.yaml

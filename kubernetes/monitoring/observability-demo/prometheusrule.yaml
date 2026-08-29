@@ -1,0 +1,96 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: observability-demo
+  namespace: observability
+  labels:
+    app.kubernetes.io/name: observability-demo
+    app.kubernetes.io/instance: observability-demo
+    app.kubernetes.io/component: alerting
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  groups:
+    - name: observability-demo.availability
+      rules:
+        - alert: ObservabilityDemoTargetDown
+          expr: |
+            absent(
+              up{
+                namespace="applications",
+                service="observability-demo"
+              }
+            )
+            or
+            max(
+              up{
+                namespace="applications",
+                service="observability-demo"
+              }
+            ) < 1
+          for: 2m
+          labels:
+            severity: critical
+            service: observability-demo
+            environment: development
+          annotations:
+            summary: Observability demo has no healthy Prometheus targets
+            description: >-
+              Prometheus has been unable to scrape any observability-demo
+              target in the applications namespace for more than two minutes.
+
+        - alert: ObservabilityDemoHighErrorRate
+          expr: |
+            (
+              sum(
+                rate(
+                  observability_demo_http_requests_total{
+                    namespace="applications",
+                    status_code=~"5.."
+                  }[5m]
+                )
+              )
+              /
+              clamp_min(
+                sum(
+                  rate(
+                    observability_demo_http_requests_total{
+                      namespace="applications"
+                    }[5m]
+                  )
+                ),
+                0.001
+              )
+            ) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+            service: observability-demo
+            environment: development
+          annotations:
+            summary: Observability demo error rate is above five percent
+            description: >-
+              More than five percent of observability-demo requests have
+              returned HTTP 5xx responses during the last five minutes.
+
+        - alert: ObservabilityDemoHighP95Latency
+          expr: |
+            histogram_quantile(
+              0.95,
+              sum by (le) (
+                rate(
+                  observability_demo_http_request_duration_seconds_bucket{
+                    namespace="applications"
+                  }[5m]
+                )
+              )
+            ) > 1
+          for: 5m
+          labels:
+            severity: warning
+            service: observability-demo
+            environment: development
+          annotations:
+            summary: Observability demo p95 latency exceeds one second
+            description: >-
+              The p95 request latency for observability-demo has exceeded
+              one second for five minutes.

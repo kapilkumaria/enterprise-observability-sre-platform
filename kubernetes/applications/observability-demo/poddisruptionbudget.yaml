@@ -1,0 +1,16 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: observability-demo
+  namespace: applications
+  labels:
+    app.kubernetes.io/name: observability-demo
+    app.kubernetes.io/instance: observability-demo
+    app.kubernetes.io/component: availability
+    app.kubernetes.io/part-of: enterprise-observability-platform
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: observability-demo
+      app.kubernetes.io/instance: observability-demo

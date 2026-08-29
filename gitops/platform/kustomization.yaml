@@ -10,3 +10,5 @@ resources:
   - jaeger-application.yaml
   - alloy-application.yaml
   - alloy-logs-application.yaml
+  - observability-demo-application.yaml
+  - observability-demo-monitoring-application.yaml

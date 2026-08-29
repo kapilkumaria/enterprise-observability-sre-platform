@@ -1,0 +1,144 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: observability-demo
+  namespace: applications
+  labels:
+    app.kubernetes.io/name: observability-demo
+    app.kubernetes.io/instance: observability-demo
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: enterprise-observability-platform
+    app.kubernetes.io/version: abcbfccc7006
+  annotations:
+    platform.kapilkumaria.com/source-revision: abcbfccc7006555186278265d101949c3f45becf
+    platform.kapilkumaria.com/image-digest: sha256:7ad3f8c596bcf2e18430ea9e4a81e7996391cbad08e4cebe539c007f4d8542b7
+    platform.kapilkumaria.com/vulnerability-exception: VE-2026-001
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  minReadySeconds: 10
+  progressDeadlineSeconds: 300
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: observability-demo
+      app.kubernetes.io/instance: observability-demo
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: observability-demo
+        app.kubernetes.io/instance: observability-demo
+        app.kubernetes.io/component: application
+        app.kubernetes.io/part-of: enterprise-observability-platform
+        app.kubernetes.io/version: abcbfccc7006
+        observability.kapilkumaria.com/export-otlp: "true"
+      annotations:
+        platform.kapilkumaria.com/source-revision: abcbfccc7006555186278265d101949c3f45becf
+        platform.kapilkumaria.com/image-digest: sha256:7ad3f8c596bcf2e18430ea9e4a81e7996391cbad08e4cebe539c007f4d8542b7
+        platform.kapilkumaria.com/vulnerability-exception: VE-2026-001
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 30
+
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: observability-demo
+              app.kubernetes.io/instance: observability-demo
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: observability-demo
+              app.kubernetes.io/instance: observability-demo
+
+      containers:
+        - name: observability-demo
+          image: 931058976119.dkr.ecr.us-east-1.amazonaws.com/enterprise-observability/observability-demo@sha256:7ad3f8c596bcf2e18430ea9e4a81e7996391cbad08e4cebe539c007f4d8542b7
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: observability-demo
+            - name: SERVICE_VERSION
+              value: abcbfccc7006555186278265d101949c3f45becf
+            - name: DEPLOYMENT_ENVIRONMENT
+              value: development
+            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+              value: http://alloy-collector.opentelemetry.svc.cluster.local:4318/v1/traces
+            - name: OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+              value: http/protobuf
+            - name: LOG_LEVEL
+              value: INFO
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            capabilities:
+              drop:
+                - ALL
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+            failureThreshold: 30
+            periodSeconds: 2
+            timeoutSeconds: 1
+
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+            successThreshold: 1
+
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 2
+            failureThreshold: 3
