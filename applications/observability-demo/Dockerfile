@@ -21,6 +21,16 @@ RUN python -m venv /opt/venv \
 
 FROM python:3.13-slim-bookworm@sha256:c45a22ea000adfd9cda29364bbe7edd23001ce5cc2ad15857cfbf7766943b9ca AS runtime
 
+# Install the vendor-provided security update available after the pinned
+# base image was published, then remove package-index data.
+RUN apt-get update \
+    && apt-get install \
+        --only-upgrade \
+        --yes \
+        --no-install-recommends \
+        libpcre2-8-0 \
+    && rm -rf /var/lib/apt/lists/*
+
 ARG SERVICE_VERSION=development
 
 ENV PATH="/opt/venv/bin:${PATH}" \
