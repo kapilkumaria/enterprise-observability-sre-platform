@@ -18,20 +18,26 @@ The agent converts Kubernetes NetworkPolicy resources into AWS-managed PolicyEnd
 
 The following namespaces use default-deny ingress and egress:
 
-- applications
-- observability
-- opentelemetry
+- `applications`
+- `monitoring-system`
+- `observability`
+- `opentelemetry`
 
 Workloads receive no network access unless another policy explicitly permits the required communication.
 
 ## DNS access
 
-All three managed namespaces may query CoreDNS over:
+The `applications`, `observability` and `opentelemetry` namespaces may query
+CoreDNS over:
 
 - UDP 53
 - TCP 53
 
-DNS traffic is restricted to pods labelled k8s-app: kube-dns in the kube-system namespace.
+DNS traffic is restricted to pods labelled `k8s-app: kube-dns` in the
+`kube-system` namespace.
+
+The `monitoring-system` namespace does not receive general DNS egress because
+the node-exporter workload does not require it.
 
 ## Application-to-OpenTelemetry access
 
@@ -98,10 +104,16 @@ also permits TCP 16686 to the Kubernetes Service CIDR because the Amazon
 VPC CNI network-policy datapath can evaluate ClusterIP traffic before
 service translation.
 
-OTLP ingestion ports TCP 4317 and TCP 4318 are not opened directly to
-application workloads in this phase. Applications will send OTLP to
-Grafana Alloy, and Alloy will forward traces to Jaeger after the
-collector phase is implemented.
+Jaeger OTLP ingestion is not exposed directly to application workloads.
+Applications export OTLP telemetry to the central Grafana Alloy collector,
+and Alloy forwards traces to Jaeger on TCP 4317.
+
+This creates a controlled telemetry path:
+
+1. Labelled application pods send OTLP traffic to Alloy.
+2. Alloy accepts traffic on TCP 4317 and TCP 4318.
+3. Alloy processes and forwards traces to Jaeger on TCP 4317.
+4. Jaeger accepts OTLP traffic only from the Alloy collector.
 
 Jaeger has no general internet egress permission.
 
@@ -155,12 +167,6 @@ network-policy datapath can evaluate ClusterIP traffic before service
 translation.
 
 The logging agents have no unrestricted internet egress.
-
-## Future extensions
-
-Additional least-privilege policies will be introduced as Prometheus, Grafana, Alertmanager, Loki and OpenTelemetry components are deployed.
-
-Broad same-namespace access should not be introduced as a replacement for workload-specific policies.
 
 ## Monitoring-stack policies
 
@@ -227,3 +233,17 @@ warnings.
 The `monitoring-system-default-deny` policy isolates the namespace. The
 `allow-prometheus-node-exporter-scraping` policy permits Prometheus to
 reach node-exporter on TCP 9100.
+
+## Extension requirements
+
+New platform components must receive dedicated least-privilege policies before
+deployment. Any additional policy must identify:
+
+- The source workload and namespace
+- The destination workload or approved CIDR
+- The required protocol and ports
+- Whether Kubernetes Service CIDR access is required
+- The operational reason for the communication
+
+Broad same-namespace or unrestricted internet access must not replace
+workload-specific policies.

@@ -219,7 +219,9 @@ sha256:06cfe350458da90bd26cd319ed212d7cd222b17942a9a14e7f63ab87748f246b
 | Grafana Alloy         |           `1.12.1` |
 | Jaeger                |           `4.12.0` |
 
-Dependency metadata is maintained in [`helm/chart-versions.yaml`](helm/chart-versions.yaml).
+Pinned Helm dependency versions, upstream repositories, application versions,
+target namespaces and Argo CD synchronization waves are maintained in
+[`helm/chart-versions.yaml`](helm/chart-versions.yaml).
 
 ---
 
@@ -357,7 +359,7 @@ The current governed image contains no HIGH or CRITICAL finding with a vendor-pr
 
 Remaining upstream findings are documented under:
 
-* [`VE-2026-002`](docs/security/vulnerability-exceptions/VE-2026-002-observability-demo-unfixed-base-image.md)
+* [Vulnerability exception VE-2026-002](docs/security/vulnerability-exceptions/VE-2026-002-observability-demo-unfixed-base-image.md)
 * [Current vulnerability assessment](docs/security/evidence/observability-demo-83abb0f-vulnerability-assessment.json)
 * [Container image release policy](docs/security/container-image-release-policy.md)
 
@@ -724,21 +726,13 @@ The validated rebuild followed this order:
 
 ## Documentation
 
-Detailed documentation is maintained under `docs/`:
-
-* [Architecture](docs/architecture.md)
-* [Implementation Guide](docs/implementation.md)
-* [Security Architecture](docs/security.md)
-* [Operations Guide](docs/operations.md)
-* [Troubleshooting Guide](docs/troubleshooting.md)
-* [Platform Validation Runbook](docs/runbooks/platform-validation.md)
-* [Telemetry Investigation Runbook](docs/runbooks/telemetry-investigation.md)
-* [Controlled High-Error-Rate Incident](docs/incidents/observability-demo-high-error-rate.md)
-* [Amazon EKS Architecture Decision](docs/adr/0001-use-amazon-eks.md)
-* [Application Documentation](applications/observability-demo/README.md)
-* [Helm Dependency Documentation](helm/README.md)
-* [NetworkPolicy Documentation](kubernetes/network-policies/README.md)
-* [Container Image Release Policy](docs/security/container-image-release-policy.md)
+- [Architecture diagram](docs/images/architecture/enterprise-observability-sre-platform-architecture.svg)
+- [Application documentation](applications/observability-demo/README.md)
+- [Helm dependency documentation](helm/README.md)
+- [Network isolation design](kubernetes/network-policies/README.md)
+- [Container image release policy](docs/security/container-image-release-policy.md)
+- [Current vulnerability assessment](docs/security/evidence/observability-demo-83abb0f-vulnerability-assessment.json)
+- [Development-only vulnerability exception](docs/security/vulnerability-exceptions/VE-2026-002-observability-demo-unfixed-base-image.md)
 
 ---
 

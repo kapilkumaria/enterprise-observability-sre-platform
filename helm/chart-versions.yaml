@@ -11,7 +11,6 @@ spec:
       applicationVersion: v0.93.1
       namespace: observability
       syncWave: "30"
-
     loki:
       repository: https://grafana.github.io/helm-charts
       chart: loki
@@ -19,27 +18,24 @@ spec:
       applicationVersion: 3.6.12
       namespace: observability
       syncWave: "40"
-
-    alloy:
-      repository: https://grafana.github.io/helm-charts
-      chart: alloy
-      chartVersion: 1.12.1
-      applicationVersion: v1.19.2
-      namespace: observability
-      syncWave: "45"
-
     jaeger:
       repository: https://jaegertracing.github.io/helm-charts
       chart: jaeger
       chartVersion: 4.12.0
       applicationVersion: 2.20.0
-      namespace: observability
+      namespace: opentelemetry
       syncWave: "50"
-
-    opentelemetryCollector:
-      repository: https://open-telemetry.github.io/opentelemetry-helm-charts
-      chart: opentelemetry-collector
-      chartVersion: 0.171.0
-      applicationVersion: 0.158.0
+    alloyLogs:
+      repository: https://grafana.github.io/helm-charts
+      chart: alloy
+      chartVersion: 1.12.1
+      applicationVersion: v1.19.2
+      namespace: opentelemetry
+      syncWave: "70"
+    alloyCollector:
+      repository: https://grafana.github.io/helm-charts
+      chart: alloy
+      chartVersion: 1.12.1
+      applicationVersion: v1.19.2
       namespace: opentelemetry
       syncWave: "60"
