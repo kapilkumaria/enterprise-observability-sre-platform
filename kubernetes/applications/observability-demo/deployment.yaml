@@ -18,18 +18,15 @@ spec:
   revisionHistoryLimit: 3
   minReadySeconds: 10
   progressDeadlineSeconds: 300
-
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 0
       maxSurge: 1
-
   selector:
     matchLabels:
       app.kubernetes.io/name: observability-demo
       app.kubernetes.io/instance: observability-demo
-
   template:
     metadata:
       labels:
@@ -47,14 +44,12 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       terminationGracePeriodSeconds: 30
-
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
         runAsGroup: 10001
         seccompProfile:
           type: RuntimeDefault
-
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
@@ -70,17 +65,14 @@ spec:
             matchLabels:
               app.kubernetes.io/name: observability-demo
               app.kubernetes.io/instance: observability-demo
-
       containers:
         - name: observability-demo
-          image: 931058976119.dkr.ecr.us-east-1.amazonaws.com/enterprise-observability/observability-demo@sha256:7ad3f8c596bcf2e18430ea9e4a81e7996391cbad08e4cebe539c007f4d8542b7
+          image: 931058976119.dkr.ecr.us-east-1.amazonaws.com/enterprise-observability/observability-demo@sha256:06cfe350458da90bd26cd319ed212d7cd222b17942a9a14e7f63ab87748f246b
           imagePullPolicy: IfNotPresent
-
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
-
           env:
             - name: OTEL_SERVICE_NAME
               value: observability-demo
@@ -94,7 +86,6 @@ spec:
               value: http/protobuf
             - name: LOG_LEVEL
               value: INFO
-
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -104,7 +95,6 @@ spec:
             capabilities:
               drop:
                 - ALL
-
           resources:
             requests:
               cpu: 100m
@@ -112,7 +102,6 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
-
           startupProbe:
             httpGet:
               path: /healthz
@@ -121,7 +110,6 @@ spec:
             failureThreshold: 30
             periodSeconds: 2
             timeoutSeconds: 1
-
           readinessProbe:
             httpGet:
               path: /readyz
@@ -132,7 +120,6 @@ spec:
             timeoutSeconds: 2
             failureThreshold: 3
             successThreshold: 1
-
           livenessProbe:
             httpGet:
               path: /healthz
