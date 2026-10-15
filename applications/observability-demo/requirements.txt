@@ -5,4 +5,5 @@ opentelemetry-instrumentation-asgi==0.65b0
 opentelemetry-instrumentation-fastapi==0.65b0
 opentelemetry-sdk==1.44.0
 prometheus-client==0.26.0
+urllib3==2.8.0
 uvicorn==0.52.4

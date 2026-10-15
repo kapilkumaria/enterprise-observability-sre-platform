@@ -1,4 +1,4 @@
-FROM python:3.13-slim-bookworm@sha256:c45a22ea000adfd9cda29364bbe7edd23001ce5cc2ad15857cfbf7766943b9ca AS builder
+FROM python:3.13-slim-bookworm@sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641 AS builder
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1 \
@@ -19,17 +19,7 @@ RUN python -m venv /opt/venv \
         setuptools \
         wheel
 
-FROM python:3.13-slim-bookworm@sha256:c45a22ea000adfd9cda29364bbe7edd23001ce5cc2ad15857cfbf7766943b9ca AS runtime
-
-# Install the vendor-provided security update available after the pinned
-# base image was published, then remove package-index data.
-RUN apt-get update \
-    && apt-get install \
-        --only-upgrade \
-        --yes \
-        --no-install-recommends \
-        libpcre2-8-0 \
-    && rm -rf /var/lib/apt/lists/*
+FROM python:3.13-slim-bookworm@sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641 AS runtime
 
 ARG SERVICE_VERSION=development
 
