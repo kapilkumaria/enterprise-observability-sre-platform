@@ -2,5 +2,5 @@ repository: https://jaegertracing.github.io/helm-charts
 chart: jaeger
 chartVersion: 4.12.0
 applicationVersion: 2.20.0
-namespace: observability
+namespace: opentelemetry
 syncWave: "50"

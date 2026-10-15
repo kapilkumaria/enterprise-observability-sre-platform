@@ -9,9 +9,10 @@ centralized log storage service.
 - Loki application: `3.6.11`
 - Deployment mode: `SingleBinary`
 
-The application version is taken from the rendered chart metadata and
-container image. It is intentionally documented as `3.6.11`, which is
-the application version packaged by chart `7.3.0`.
+Chart `7.3.0` declares Helm `appVersion` `3.6.12`. The rendered workload,
+however, uses `docker.io/grafana/loki:3.6.11`. This repository records the
+declared chart metadata in `chart.yaml` and treats `3.6.11` as the verified
+runtime container version.
 
 ## Architecture
 

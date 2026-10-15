@@ -1,6 +1,0 @@
-repository: https://open-telemetry.github.io/opentelemetry-helm-charts
-chart: opentelemetry-collector
-chartVersion: 0.171.0
-applicationVersion: 0.158.0
-namespace: opentelemetry
-syncWave: "60"

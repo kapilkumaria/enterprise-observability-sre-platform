@@ -22,9 +22,9 @@ The trace flow is:
 The central collector runs as a single Kubernetes Deployment in the
 `opentelemetry` namespace.
 
-This deployment is intentionally separate from the future node-level
-Alloy logging agents. The logging agents will run as a DaemonSet and
-will forward Kubernetes container logs to Loki.
+This deployment is intentionally separate from the node-level Alloy logging
+agents managed under `helm/alloy-logs`. Those agents run as a DaemonSet and
+forward Kubernetes container logs to Loki.
 
 ## Security controls
 
