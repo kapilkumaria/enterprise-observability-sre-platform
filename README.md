@@ -182,7 +182,7 @@ The repository uses:
 The governed release is deployed using an immutable reference:
 
 ```text
-sha256:06cfe350458da90bd26cd319ed212d7cd222b17942a9a14e7f63ab87748f246b
+sha256:370f330f266f3ec77a4818633d4714744397867f9fe055e432b9c6295323357a
 ```
 
 ---
@@ -359,8 +359,8 @@ The current governed image contains no HIGH or CRITICAL finding with a vendor-pr
 
 Remaining upstream findings are documented under:
 
-* [Vulnerability exception VE-2026-002](docs/security/vulnerability-exceptions/VE-2026-002-observability-demo-unfixed-base-image.md)
-* [Current vulnerability assessment](docs/security/evidence/observability-demo-83abb0f-vulnerability-assessment.json)
+* [Vulnerability exception VE-2026-003](docs/security/vulnerability-exceptions/VE-2026-003-observability-demo-unfixed-base-image.md)
+* [Current vulnerability assessment](docs/security/evidence/observability-demo-28d32bf-vulnerability-assessment.json)
 * [Container image release policy](docs/security/container-image-release-policy.md)
 
 ---
@@ -731,8 +731,8 @@ The validated rebuild followed this order:
 - [Helm dependency documentation](helm/README.md)
 - [Network isolation design](kubernetes/network-policies/README.md)
 - [Container image release policy](docs/security/container-image-release-policy.md)
-- [Current vulnerability assessment](docs/security/evidence/observability-demo-83abb0f-vulnerability-assessment.json)
-- [Development-only vulnerability exception](docs/security/vulnerability-exceptions/VE-2026-002-observability-demo-unfixed-base-image.md)
+- [Current vulnerability assessment](docs/security/evidence/observability-demo-28d32bf-vulnerability-assessment.json)
+- [Development-only vulnerability exception](docs/security/vulnerability-exceptions/VE-2026-003-observability-demo-unfixed-base-image.md)
 
 ---
 
@@ -740,8 +740,8 @@ The validated rebuild followed this order:
 
 Current governed-release evidence:
 
-* [Vulnerability assessment](docs/security/evidence/observability-demo-83abb0f-vulnerability-assessment.json)
-* [Development-only exception VE-2026-002](docs/security/vulnerability-exceptions/VE-2026-002-observability-demo-unfixed-base-image.md)
+* [Vulnerability assessment](docs/security/evidence/observability-demo-28d32bf-vulnerability-assessment.json)
+* [Development-only exception VE-2026-003](docs/security/vulnerability-exceptions/VE-2026-003-observability-demo-unfixed-base-image.md)
 * [Container image release policy](docs/security/container-image-release-policy.md)
 
 Historical evidence is retained to demonstrate remediation and release-governance progression.

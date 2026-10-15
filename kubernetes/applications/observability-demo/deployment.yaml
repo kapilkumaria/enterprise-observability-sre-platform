@@ -8,11 +8,11 @@ metadata:
     app.kubernetes.io/instance: observability-demo
     app.kubernetes.io/component: application
     app.kubernetes.io/part-of: enterprise-observability-platform
-    app.kubernetes.io/version: abcbfccc7006
+    app.kubernetes.io/version: 28d32bf1a172
   annotations:
-    platform.kapilkumaria.com/source-revision: abcbfccc7006555186278265d101949c3f45becf
-    platform.kapilkumaria.com/image-digest: sha256:7ad3f8c596bcf2e18430ea9e4a81e7996391cbad08e4cebe539c007f4d8542b7
-    platform.kapilkumaria.com/vulnerability-exception: VE-2026-001
+    platform.kapilkumaria.com/source-revision: 28d32bf1a172de51243c50da3318e4522c514f2d
+    platform.kapilkumaria.com/image-digest: sha256:370f330f266f3ec77a4818633d4714744397867f9fe055e432b9c6295323357a
+    platform.kapilkumaria.com/vulnerability-exception: VE-2026-003
 spec:
   replicas: 2
   revisionHistoryLimit: 3
@@ -34,12 +34,12 @@ spec:
         app.kubernetes.io/instance: observability-demo
         app.kubernetes.io/component: application
         app.kubernetes.io/part-of: enterprise-observability-platform
-        app.kubernetes.io/version: abcbfccc7006
+        app.kubernetes.io/version: 28d32bf1a172
         observability.kapilkumaria.com/export-otlp: "true"
       annotations:
-        platform.kapilkumaria.com/source-revision: abcbfccc7006555186278265d101949c3f45becf
-        platform.kapilkumaria.com/image-digest: sha256:7ad3f8c596bcf2e18430ea9e4a81e7996391cbad08e4cebe539c007f4d8542b7
-        platform.kapilkumaria.com/vulnerability-exception: VE-2026-001
+        platform.kapilkumaria.com/source-revision: 28d32bf1a172de51243c50da3318e4522c514f2d
+        platform.kapilkumaria.com/image-digest: sha256:370f330f266f3ec77a4818633d4714744397867f9fe055e432b9c6295323357a
+        platform.kapilkumaria.com/vulnerability-exception: VE-2026-003
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
@@ -67,7 +67,7 @@ spec:
               app.kubernetes.io/instance: observability-demo
       containers:
         - name: observability-demo
-          image: 931058976119.dkr.ecr.us-east-1.amazonaws.com/enterprise-observability/observability-demo@sha256:06cfe350458da90bd26cd319ed212d7cd222b17942a9a14e7f63ab87748f246b
+          image: 931058976119.dkr.ecr.us-east-1.amazonaws.com/enterprise-observability/observability-demo@sha256:370f330f266f3ec77a4818633d4714744397867f9fe055e432b9c6295323357a
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -77,7 +77,7 @@ spec:
             - name: OTEL_SERVICE_NAME
               value: observability-demo
             - name: SERVICE_VERSION
-              value: abcbfccc7006555186278265d101949c3f45becf
+              value: 28d32bf1a172de51243c50da3318e4522c514f2d
             - name: DEPLOYMENT_ENVIRONMENT
               value: development
             - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
